@@ -1,0 +1,32 @@
+# 环境变量文件
+.env
+
+# Python缓存文件
+__pycache__/
+*.py[cod]
+*$py.class
+
+# 虚拟环境
+venv/
+env/
+ENV/
+
+# 日志文件
+*.log
+logs/
+
+# IDE相关
+.idea/
+.vscode/
+*.swp
+.DS_Store
+
+# 运行时生成的文件
+joke_history.json
+
+# Python打包相关
+*.manifest
+*.spec
+dist/
+build/
+*.egg-info/

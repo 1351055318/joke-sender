@@ -1,0 +1,104 @@
+/* 自定义样式 */
+
+/* 全局样式 */
+body {
+    background-color: #f8f9fa;
+    font-family: 'Microsoft YaHei', sans-serif;
+}
+
+/* 卡片样式 */
+.card {
+    border-radius: 10px;
+    overflow: hidden;
+    transition: transform 0.3s ease;
+    border: none;
+}
+
+.card:hover {
+    transform: translateY(-5px);
+}
+
+.card-header {
+    border-bottom: none;
+}
+
+/* 按钮样式 */
+.btn {
+    border-radius: 30px;
+    padding: 8px 20px;
+    font-weight: 500;
+    transition: all 0.3s;
+}
+
+.btn-primary {
+    background: linear-gradient(45deg, #4a6bff, #657eff);
+    border: none;
+    box-shadow: 0 4px 6px rgba(74, 107, 255, 0.2);
+}
+
+.btn-primary:hover {
+    background: linear-gradient(45deg, #3a5eff, #556dff);
+    box-shadow: 0 5px 15px rgba(74, 107, 255, 0.3);
+    transform: translateY(-2px);
+}
+
+.btn-lg {
+    padding: 10px 25px;
+    font-size: 1.1rem;
+}
+
+/* 导航栏样式 */
+.navbar {
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+    background: linear-gradient(to right, #4a6bff, #657eff) !important;
+}
+
+/* 响应式调整 */
+@media (max-width: 767.98px) {
+    .card {
+        margin-bottom: 20px;
+    }
+    
+    h1.card-title {
+        font-size: 1.8rem;
+    }
+}
+
+@media (max-width: 575.98px) {
+    h1.card-title {
+        font-size: 1.5rem;
+    }
+    
+    .btn-lg {
+        padding: 8px 20px;
+        font-size: 1rem;
+    }
+}
+
+/* 笑话显示框样式 */
+#jokeBox {
+    min-height: 100px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+blockquote {
+    border-left: 3px solid #4a6bff;
+    padding-left: 15px;
+    color: #555;
+}
+
+/* 历史记录列表样式 */
+.list-group-item {
+    transition: background-color 0.2s;
+}
+
+.list-group-item:hover {
+    background-color: #f8f9fa;
+}
+
+/* 自定义阴影 */
+.shadow-sm {
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.05) !important;
+} 

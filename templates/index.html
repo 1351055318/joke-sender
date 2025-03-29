@@ -1,0 +1,173 @@
+{% extends "base.html" %}
+
+{% block title %}每日冷笑话/土味情话推送{% endblock %}
+
+{% block content %}
+<!-- 顶部卡片 -->
+<div class="card mb-4 shadow-sm">
+    <div class="card-body">
+        <div class="row">
+            <div class="col-md-8">
+                <h1 class="card-title mb-3">每日冷笑话/土味情话推送</h1>
+                <p class="card-text">这是一个简单的应用，可以定时推送冷笑话或土味情话到桌面通知、邮箱或微信。</p>
+                {% if next_run %}
+                <p class="text-info">
+                    <i class="far fa-clock mr-1"></i>下次推送时间: <strong>{{ next_run }}</strong>
+                </p>
+                {% else %}
+                <p class="text-warning">
+                    <i class="fas fa-exclamation-circle mr-1"></i>尚未设置定时推送
+                </p>
+                {% endif %}
+            </div>
+            <div class="col-md-4 d-flex align-items-center justify-content-center">
+                <form action="{{ url_for('send_now') }}" method="post" class="text-center">
+                    <button type="submit" class="btn btn-primary btn-lg">
+                        <i class="fas fa-paper-plane mr-2"></i>立即发送
+                    </button>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- 主要内容 -->
+<div class="row">
+    <!-- 左侧：历史记录 -->
+    <div class="col-lg-8 mb-4">
+        <div class="card shadow-sm" id="history">
+            <div class="card-header bg-primary text-white">
+                <h5 class="mb-0"><i class="fas fa-history mr-2"></i>历史记录</h5>
+            </div>
+            <div class="card-body p-0">
+                {% if history %}
+                <div class="list-group list-group-flush">
+                    {% for item in history %}
+                    <div class="list-group-item">
+                        <div class="d-flex justify-content-between align-items-center mb-1">
+                            <small class="text-muted">{{ item.timestamp }}</small>
+                            <span class="badge badge-primary">{{ item.title }}</span>
+                        </div>
+                        <p class="mb-0">{{ item.joke }}</p>
+                    </div>
+                    {% endfor %}
+                </div>
+                {% else %}
+                <div class="text-center py-5">
+                    <i class="fas fa-inbox fa-3x text-muted mb-3"></i>
+                    <p>暂无历史记录</p>
+                </div>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+
+    <!-- 右侧：设置 -->
+    <div class="col-lg-4">
+        <!-- 定时设置 -->
+        <div class="card shadow-sm mb-4">
+            <div class="card-header bg-primary text-white">
+                <h5 class="mb-0"><i class="fas fa-clock mr-2"></i>定时设置</h5>
+            </div>
+            <div class="card-body">
+                <form action="{{ url_for('schedule') }}" method="post">
+                    <div class="form-group">
+                        <label for="scheduleTime">每日发送时间</label>
+                        <input type="time" class="form-control" id="scheduleTime" name="time" value="08:00" required>
+                    </div>
+                    <button type="submit" class="btn btn-primary btn-block">
+                        <i class="fas fa-save mr-2"></i>保存设置
+                    </button>
+                </form>
+            </div>
+        </div>
+
+        <!-- 推送设置 -->
+        <div class="card shadow-sm" id="settings">
+            <div class="card-header bg-primary text-white">
+                <h5 class="mb-0"><i class="fas fa-cog mr-2"></i>推送设置</h5>
+            </div>
+            <div class="card-body">
+                <form action="{{ url_for('update_settings') }}" method="post">
+                    <!-- Server酱设置 -->
+                    <div class="form-group">
+                        <label for="serverChanKey">Server酱 SCKEY</label>
+                        <input type="text" class="form-control" id="serverChanKey" name="server_chan_key" 
+                               value="{{ server_chan_key }}" placeholder="用于微信推送">
+                        <small class="form-text text-muted">
+                            <a href="https://sct.ftqq.com/" target="_blank">如何获取 Server酱 SCKEY?</a>
+                        </small>
+                    </div>
+                    
+                    <!-- 邮箱设置 -->
+                    <div class="form-group">
+                        <label for="emailUser">发送邮箱</label>
+                        <input type="email" class="form-control" id="emailUser" name="email_user" 
+                               value="{{ config.EMAIL_USER }}" placeholder="your@example.com">
+                    </div>
+                    <div class="form-group">
+                        <label for="emailPassword">邮箱密码/授权码</label>
+                        <input type="password" class="form-control" id="emailPassword" name="email_password" 
+                               value="{{ config.EMAIL_PASSWORD }}" placeholder="邮箱密码或授权码">
+                    </div>
+                    <div class="form-group">
+                        <label for="emailTo">接收邮箱</label>
+                        <input type="email" class="form-control" id="emailTo" name="email_to" 
+                               value="{{ config.EMAIL_TO }}" placeholder="receiver@example.com">
+                    </div>
+                    
+                    <button type="submit" class="btn btn-primary btn-block">
+                        <i class="fas fa-save mr-2"></i>保存设置
+                    </button>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- 随机获取部分 -->
+<div class="card shadow-sm mt-4">
+    <div class="card-header bg-primary text-white">
+        <h5 class="mb-0"><i class="fas fa-random mr-2"></i>随机一条</h5>
+    </div>
+    <div class="card-body">
+        <div class="text-center mb-3" id="jokeBox">
+            <blockquote class="blockquote">
+                <p class="mb-0" id="randomJoke">点击下方按钮获取随机笑话</p>
+            </blockquote>
+        </div>
+        <div class="text-center">
+            <button id="getRandomJoke" class="btn btn-outline-primary">
+                <i class="fas fa-sync-alt mr-2"></i>换一条
+            </button>
+            <button id="copyJoke" class="btn btn-outline-success ml-2" disabled>
+                <i class="fas fa-copy mr-2"></i>复制
+            </button>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block scripts %}
+<script>
+    $(document).ready(function() {
+        // 获取随机笑话
+        $("#getRandomJoke").click(function() {
+            $.getJSON("/api/joke", function(data) {
+                $("#randomJoke").text(data.joke);
+                $("#copyJoke").prop("disabled", false);
+            });
+        });
+        
+        // 复制笑话
+        $("#copyJoke").click(function() {
+            const joke = $("#randomJoke").text();
+            navigator.clipboard.writeText(joke).then(function() {
+                alert("已复制到剪贴板！");
+            }, function() {
+                alert("复制失败，请手动复制。");
+            });
+        });
+    });
+</script>
+{% endblock %} 
