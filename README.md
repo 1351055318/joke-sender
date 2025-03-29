@@ -1,13 +1,8 @@
-# 每日冷笑话/土味情话推送
+![image](https://github.com/user-attachments/assets/043ad3c1-557f-4e09-a7f9-8b93169692a7)# 每日冷笑话/土味情话推送
 
 这是一个简单的Python应用，可以定时推送冷笑话或土味情话到桌面通知、邮箱或微信。提供了Web界面，支持桌面端和移动端访问。
 
 ![应用截图](screenshots/screenshot.png)
-
-## 项目仓库
-
-- GitHub: [https://github.com/你的用户名/joke-sender](https://github.com/你的用户名/joke-sender)
-- Gitee: [https://gitee.com/你的用户名/joke-sender](https://gitee.com/你的用户名/joke-sender)
 
 ## 功能特点
 
